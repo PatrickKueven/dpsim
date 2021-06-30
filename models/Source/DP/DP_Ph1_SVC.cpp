@@ -68,6 +68,7 @@ void DP::Ph1::SVC::initializeFromNodesAndTerminals(Real frequency) {
 	// create elements
 	// Inductor with Switch
 	mSubInductor = std::make_shared<DP::Ph1::Inductor>(mName + "_ind", mLogLevel);
+	mSubInductor->setSubsystem(mSubsystem);
 	mSubInductor->setParameters(LInit);
 	mSubInductor->connect({ SimNode::GND, mVirtualNodes[0] });
 	mSubInductor->initialize(mFrequencies);

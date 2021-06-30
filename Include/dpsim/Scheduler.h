@@ -70,7 +70,7 @@ namespace DPsim {
 		/// which means that it should not be removed from the task graph
 		class Root : public CPS::Task {
 		public:
-			Root() : Task("Root") {
+			Root() : Task("Root", 1) {
 				mAttributeDependencies.push_back(external);
 			}
 

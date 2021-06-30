@@ -38,6 +38,7 @@ namespace DPsim {
 		Real mTimeStep;
 		/// Activates parallelized computation of frequencies
 		Bool mFrequencyParallel = false;
+		long mSubsystem = -1;
 
 		// #### Initialization ####
 		/// steady state initialization time limit
@@ -78,6 +79,10 @@ namespace DPsim {
 		}
 		///
 		virtual void setSystem(const CPS::SystemTopology &system) {}
+		///
+		void setSubsystem(long subsystem) {
+			mSubsystem = subsystem;
+		}
 
 		// #### Initialization ####
 		///

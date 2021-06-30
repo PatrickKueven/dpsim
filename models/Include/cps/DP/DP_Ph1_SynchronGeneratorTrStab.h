@@ -90,7 +90,7 @@ namespace Ph1 {
 		class MnaPreStep : public Task {
 		public:
 			MnaPreStep(SynchronGeneratorTrStab& generator) :
-				Task(generator.mName + ".MnaPreStep"), mGenerator(generator) {
+				Task(generator.mName + ".MnaPreStep", generator.mSubsystem), mGenerator(generator) {
 				// other attributes generally also influence the pre step,
 				// but aren't marked as writable anyway
 				mPrevStepDependencies.push_back(generator.attribute("v_intf"));
@@ -106,7 +106,7 @@ namespace Ph1 {
 		class AddBStep : public Task {
 		public:
 			AddBStep(SynchronGeneratorTrStab& generator) :
-				Task(generator.mName + ".AddBStep"), mGenerator(generator) {
+				Task(generator.mName + ".AddBStep", generator.mSubsystem), mGenerator(generator) {
 				mAttributeDependencies.push_back(generator.mSubVoltageSource->attribute("right_vector"));
 				mAttributeDependencies.push_back(generator.mSubInductor->attribute("right_vector"));
 				mModifiedAttributes.push_back(generator.attribute("right_vector"));
@@ -121,7 +121,7 @@ namespace Ph1 {
 		class MnaPostStep : public Task {
 		public:
 			MnaPostStep(SynchronGeneratorTrStab& generator, Attribute<Matrix>::Ptr leftVector) :
-				Task(generator.mName + ".MnaPostStep"), mGenerator(generator), mLeftVector(leftVector) {
+				Task(generator.mName + ".MnaPostStep", generator.mSubsystem), mGenerator(generator), mLeftVector(leftVector) {
 				mAttributeDependencies.push_back(leftVector);
 				mModifiedAttributes.push_back(generator.attribute("v_intf"));
 			}

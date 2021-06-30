@@ -47,7 +47,7 @@ namespace CPS {
 				class MnaPreStep : public CPS::Task {
 				public:
 					MnaPreStep(ControlledVoltageSource& ControlledVoltageSource) :
-						Task(ControlledVoltageSource.mName + ".MnaPreStep"), mControlledVoltageSource(ControlledVoltageSource) {
+						Task(ControlledVoltageSource.mName + ".MnaPreStep", ControlledVoltageSource.mSubsystem), mControlledVoltageSource(ControlledVoltageSource) {
 						mAttributeDependencies.push_back(ControlledVoltageSource.attribute("v_intf"));
 						mModifiedAttributes.push_back(mControlledVoltageSource.attribute("right_vector"));
 					}
@@ -61,7 +61,7 @@ namespace CPS {
 				class MnaPostStep : public CPS::Task {
 				public:
 					MnaPostStep(ControlledVoltageSource& ControlledVoltageSource, Attribute<Matrix>::Ptr leftVector) :
-						Task(ControlledVoltageSource.mName + ".MnaPostStep"), mControlledVoltageSource(ControlledVoltageSource), mLeftVector(leftVector)
+						Task(ControlledVoltageSource.mName + ".MnaPostStep", ControlledVoltageSource.mSubsystem), mControlledVoltageSource(ControlledVoltageSource), mLeftVector(leftVector)
 					{
 						mAttributeDependencies.push_back(mLeftVector);
 						mModifiedAttributes.push_back(mControlledVoltageSource.attribute("i_intf"));

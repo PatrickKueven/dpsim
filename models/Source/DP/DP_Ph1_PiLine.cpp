@@ -50,6 +50,7 @@ void DP::Ph1::PiLine::initializeFromNodesAndTerminals(Real frequency) {
 	mSubSeriesResistor->initializeFromNodesAndTerminals(frequency);
 
 	mSubSeriesInductor = std::make_shared<DP::Ph1::Inductor>(mName + "_ind", mLogLevel);
+	mSubSeriesInductor->setSubsystem(mSubsystem);
 	mSubSeriesInductor->setParameters(mSeriesInd);
 	mSubSeriesInductor->connect({ mVirtualNodes[0], mTerminals[1]->node() });
 	mSubSeriesInductor->initialize(mFrequencies);

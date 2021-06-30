@@ -63,7 +63,8 @@ void simulateDecoupled(std::list<fs::path> filenames, Int copies, Int threads, I
 	sim.setFinalTime(0.5);
 	sim.setDomain(Domain::DP);
 	if (threads > 0)
-		sim.setScheduler(std::make_shared<OpenMPLevelScheduler>(threads));
+		sim.setScheduler(std::make_shared<MPILevelScheduler>(threads));
+		//sim.setScheduler(std::make_shared<OpenMPLevelScheduler>(threads));
 
 	// Logging
 	//auto logger = DataLogger::make(simName);
@@ -83,7 +84,20 @@ void simulateDecoupled(std::list<fs::path> filenames, Int copies, Int threads, I
 	//std::ofstream of1("topology_graph.svg");
 	//sys.topologyGraph().render(of1));
 
+	auto start = std::chrono::system_clock::now();
+
 	sim.run();
+
+	auto end = std::chrono::system_clock::now();
+
+    	auto elapsed_nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
+	std::time_t start_time = std::chrono::system_clock::to_time_t(start);
+	std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+
+	std::cout << "started computation at " << std::ctime(&start_time)
+	          << "finished computation at " << std::ctime(&end_time)
+              	  << "elapsed time: " << (elapsed_nanoseconds.count() / 1000000000.0) << "s\n";
+
 	sim.logStepTimes(simName + "_step_times");
 }
 

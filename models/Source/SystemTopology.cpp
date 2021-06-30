@@ -12,6 +12,7 @@
 #include <unordered_map>
 
 #include <cps/SystemTopology.h>
+#include <cps/SimSignalComp.h>
 
 using namespace CPS;
 
@@ -122,6 +123,25 @@ void SystemTopology::splitSubnets(std::vector<SystemTopology>& splitSystems) {
 			}
 		}
 		for (int currentNet = 0; currentNet < numberSubnets; currentNet++) {
+			for (auto node : nodes[currentNet]) {
+				auto pnode = std::dynamic_pointer_cast<SimNode<VarType>>(node);
+				if (pnode) {
+					pnode->setSubsystem(currentNet);
+				}
+			}
+
+			for (auto comp : components[currentNet]) {
+				auto pcomp = std::dynamic_pointer_cast<SimPowerComp<VarType>>(comp);
+				if (!pcomp) {
+					auto pcomp2 = std::dynamic_pointer_cast<SimSignalComp>(comp);
+					if (pcomp2) {
+						pcomp2->setSubsystem(currentNet);
+					}
+					continue;
+				}
+				pcomp->setSubsystem(currentNet);
+			}
+
 			splitSystems.emplace_back(mSystemFrequency,
 				nodes[currentNet], components[currentNet]);
 		}

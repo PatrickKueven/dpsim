@@ -101,6 +101,7 @@ void SP::Ph1::Transformer::initializeFromNodesAndTerminals(Real frequency) {
 
 	// Create series sub components
 	mSubInductor = std::make_shared<SP::Ph1::Inductor>(mUID + "_ind", mName + "_ind", Logger::Level::off);
+	mSubInductor->setSubsystem(mSubsystem);
 	mSubInductor->setParameters(mInductance);
 
 	if (mNumVirtualNodes == 3) {

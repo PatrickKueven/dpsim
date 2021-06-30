@@ -32,6 +32,7 @@ SP::Ph1::AvVoltageSourceInverterDQ::AvVoltageSourceInverterDQ(String uid, String
 	mSubCapacitorF = SP::Ph1::Capacitor::make(mName + "_capF", mLogLevel);
 	mSubInductorF = SP::Ph1::Inductor::make(mName + "_indF", mLogLevel);
 	mSubCtrledVoltageSource = SP::Ph1::VoltageSource::make(mName + "_src", mLogLevel);
+	mSubCtrledVoltageSource->setSubsystem(mSubsystem);
 	mSubComponents.push_back(mSubResistorF);
 	mSubComponents.push_back(mSubResistorC);
 	mSubComponents.push_back(mSubCapacitorF);

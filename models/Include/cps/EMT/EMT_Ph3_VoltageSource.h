@@ -63,7 +63,7 @@ namespace CPS {
 				class MnaPreStep : public Task {
 				public:
 					MnaPreStep(VoltageSource& voltageSource) :
-						Task(voltageSource.mName + ".MnaPreStep"), mVoltageSource(voltageSource) {
+						Task(voltageSource.mName + ".MnaPreStep", voltageSource.mSubsystem), mVoltageSource(voltageSource) {
 							mVoltageSource.mnaAddPreStepDependencies(mPrevStepDependencies, mAttributeDependencies, mModifiedAttributes);
 						}
 						void execute(Real time, Int timeStepCount) { mVoltageSource.mnaPreStep(time, timeStepCount); };
@@ -74,7 +74,7 @@ namespace CPS {
 				class MnaPostStep : public Task {
 				public:
 					MnaPostStep(VoltageSource& voltageSource, Attribute<Matrix>::Ptr leftVector) :
-						Task(voltageSource.mName + ".MnaPostStep"),			
+						Task(voltageSource.mName + ".MnaPostStep", voltageSource.mSubsystem),
 						mVoltageSource(voltageSource), mLeftVector(leftVector) {
 							mVoltageSource.mnaAddPostStepDependencies(mPrevStepDependencies, mAttributeDependencies, mModifiedAttributes, mLeftVector);
 					}

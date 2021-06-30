@@ -74,7 +74,7 @@ namespace CPS {
 				class MnaPreStep : public Task {
 				public:
 					MnaPreStep(Transformer& transformer) :
-						Task(transformer.mName + ".MnaPreStep"), mTransformer(transformer) {
+						Task(transformer.mName + ".MnaPreStep", transformer.mSubsystem), mTransformer(transformer) {
 							mTransformer.mnaAddPreStepDependencies(mPrevStepDependencies, mAttributeDependencies, mModifiedAttributes);
 					}
 					void execute(Real time, Int timeStepCount) { mTransformer.mnaPreStep(time, timeStepCount); };
@@ -86,7 +86,7 @@ namespace CPS {
 				class MnaPostStep : public Task {
 				public:
 					MnaPostStep(Transformer& transformer, Attribute<Matrix>::Ptr leftVector) :
-						Task(transformer.mName + ".MnaPostStep"), mTransformer(transformer), mLeftVector(leftVector) {
+						Task(transformer.mName + ".MnaPostStep", transformer.mSubsystem), mTransformer(transformer), mLeftVector(leftVector) {
 							mTransformer.mnaAddPostStepDependencies(mPrevStepDependencies, mAttributeDependencies, mModifiedAttributes, mLeftVector);
 					}
 					void execute(Real time, Int timeStepCount) { mTransformer.mnaPostStep(time, timeStepCount, mLeftVector); };

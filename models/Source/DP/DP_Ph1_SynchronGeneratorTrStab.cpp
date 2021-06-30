@@ -131,6 +131,7 @@ void DP::Ph1::SynchronGeneratorTrStab::initializeFromNodesAndTerminals(Real freq
 
 	// Create sub voltage source for emf
 	mSubVoltageSource = DP::Ph1::VoltageSource::make(mName + "_src", mLogLevel);
+	mSubVoltageSource->setSubsystem(mSubsystem);
 	mSubVoltageSource->setParameters(mEp);
 	mSubVoltageSource->connect({SimNode::GND, mVirtualNodes[0]});
 	mSubVoltageSource->setVirtualNodeAt(mVirtualNodes[1], 0);
@@ -139,6 +140,7 @@ void DP::Ph1::SynchronGeneratorTrStab::initializeFromNodesAndTerminals(Real freq
 
 	// Create sub inductor as Xpd
 	mSubInductor = DP::Ph1::Inductor::make(mName + "_ind", mLogLevel);
+	mSubInductor->setSubsystem(mSubsystem);
 	mSubInductor->setParameters(mLpd);
 	mSubInductor->connect({terminal(0)->node(), mVirtualNodes[0]});
 	mSubInductor->initialize(mFrequencies);

@@ -22,6 +22,7 @@ namespace CPS {
 		/// special behavior for components during initialization
 		Bool mBehaviour = Behaviour::Simulation;
 	public:
+		long mSubsystem = -1;
 		typedef std::shared_ptr<SimSignalComp> Ptr;
 		typedef std::vector<Ptr> List;
 
@@ -44,5 +45,7 @@ namespace CPS {
 		}
 		/// Set behavior of component, e.g. initialization
 		void setBehaviour(Behaviour behaviour) { mBehaviour = behaviour; }
+
+		void setSubsystem(long subsystem) { mSubsystem = subsystem; }
 	};
 }

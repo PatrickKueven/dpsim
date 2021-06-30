@@ -43,6 +43,7 @@ void DP::Ph1::RxLine::initializeFromNodesAndTerminals(Real frequency) {
 	mSubResistor->initializeFromNodesAndTerminals(frequency);
 
 	mSubInductor = std::make_shared<DP::Ph1::Inductor>(mName + "_ind", mLogLevel);
+	mSubInductor->setSubsystem(mSubsystem);
 	mSubInductor->setParameters(mSeriesInd);
 	mSubInductor->connect({ mVirtualNodes[0], mTerminals[1]->node() });
 	mSubInductor->initializeFromNodesAndTerminals(frequency);

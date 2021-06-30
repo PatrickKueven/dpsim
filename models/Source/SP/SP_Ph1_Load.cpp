@@ -125,6 +125,7 @@ void SP::Ph1::Load::initializeFromNodesAndTerminals(Real frequency) {
 	if (mReactance > 0) {
 		mInductance = mReactance / (2 * PI * frequency);
 		mSubInductor = std::make_shared<SP::Ph1::Inductor>(mUID + "_res", mName + "_ind", Logger::Level::off);
+		mSubInductor->setSubsystem(mSubsystem);
 		mSubInductor->setParameters(mInductance);
 		mSubInductor->connect({ SimNode::GND, mTerminals[0]->node() });
 		mSubInductor->initialize(mFrequencies);

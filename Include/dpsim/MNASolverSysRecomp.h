@@ -45,7 +45,7 @@ namespace DPsim {
 		class SolveTask : public CPS::Task {
 		public:
 			SolveTask(MnaSolverSysRecomp<VarType>& solver) :
-				Task(solver.mName + ".Solve"), mSolver(solver) {
+				Task(solver.mName + ".Solve", solver.mSubsystem), mSolver(solver) {
 
 				for (auto it : solver.mMNAComponents) {
 					if (it->template attribute<Matrix>("right_vector")->get().size() != 0)
@@ -66,7 +66,7 @@ namespace DPsim {
 		class LogTask : public CPS::Task {
 		public:
 			LogTask(MnaSolverSysRecomp<VarType>& solver) :
-				Task(solver.mName + ".Log"), mSolver(solver) {
+				Task(solver.mName + ".Log", solver.mSubsystem), mSolver(solver) {
 				mAttributeDependencies.push_back(solver.attribute("left_vector"));
 				mModifiedAttributes.push_back(Scheduler::external);
 			}

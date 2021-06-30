@@ -40,6 +40,7 @@ namespace CPS {
 		std::vector<bool> mMatrixNodeIndexIsGround;
 
 	public:
+		long mSubsystem = -1;
 		typedef VarType Type;
 		typedef std::shared_ptr<SimPowerComp<VarType>> Ptr;
 		typedef std::vector<Ptr> List;
@@ -134,6 +135,8 @@ namespace CPS {
 		Bool terminalNotGrounded(UInt index) { return !mMatrixNodeIndexIsGround[index]; }
 
 		// #### Setters ####
+		///
+		void setSubsystem(long subsystem) { mSubsystem = subsystem; }
 		void setIntfCurrent(MatrixVar<VarType> current) { mIntfCurrent = current; }
 		///
 		void setIntfVoltage(MatrixVar<VarType> voltage) { mIntfVoltage = voltage; }

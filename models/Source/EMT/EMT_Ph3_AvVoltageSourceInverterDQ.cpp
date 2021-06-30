@@ -34,6 +34,7 @@ EMT::Ph3::AvVoltageSourceInverterDQ::AvVoltageSourceInverterDQ(String uid, Strin
 	mSubCapacitorF = EMT::Ph3::Capacitor::make(mName + "_capF", mLogLevel);
 	mSubInductorF = EMT::Ph3::Inductor::make(mName + "_indF", mLogLevel);
 	mSubCtrledVoltageSource = EMT::Ph3::VoltageSource::make(mName + "_src", mLogLevel);
+	mSubCtrledVoltageSource->setSubsystem(mSubsystem);
 	mSubComponents.push_back(mSubResistorF);
 	mSubComponents.push_back(mSubResistorC);
 	mSubComponents.push_back(mSubCapacitorF);

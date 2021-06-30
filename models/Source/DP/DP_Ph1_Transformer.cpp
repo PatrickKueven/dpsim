@@ -71,6 +71,7 @@ void DP::Ph1::Transformer::initializeFromNodesAndTerminals(Real frequency) {
 
 	// Create series sub components
 	mSubInductor = std::make_shared<DP::Ph1::Inductor>(mName + "_ind", mLogLevel);
+	mSubInductor->setSubsystem(mSubsystem);
 	mSubInductor->setParameters(mInductance);
 
 	if (mNumVirtualNodes == 3) {

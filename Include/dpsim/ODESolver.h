@@ -78,6 +78,7 @@ namespace DPsim {
 		int check_flag(void *flagvalue, const std::string &funcname, int opt);
 
 	public:
+		long mSubsystem;
 		/// Create solve object with corresponding component and information on the integration type
 		ODESolver(String name, const CPS::ODEInterface::Ptr &comp, bool implicit_integration, Real timestep);
 		/// Deallocate all memory
@@ -86,7 +87,7 @@ namespace DPsim {
 		class SolveTask : public CPS::Task {
 		public:
 			SolveTask(ODESolver& solver)
-			: Task(solver.mName + ".Solve"), mSolver(solver) {
+			: Task(solver.mName + ".Solve", solver.mSubsystem), mSolver(solver) {
 				mAttributeDependencies.push_back(solver.mComponent->attribute("ode_pre_state"));
 				mModifiedAttributes.push_back(solver.mComponent->attribute("ode_post_state"));
 			}

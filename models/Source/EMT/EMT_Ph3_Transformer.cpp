@@ -83,6 +83,7 @@ void EMT::Ph3::Transformer::initializeFromNodesAndTerminals(Real frequency) {
 
 	// Create series sub components
 	mSubInductor = std::make_shared<EMT::Ph3::Inductor>(mName + "_ind", mLogLevel);
+	mSubInductor->setSubsystem(mSubsystem);
 	mSubInductor->setParameters(mInductance);
 
 	if (mNumVirtualNodes == 3) {

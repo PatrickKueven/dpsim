@@ -128,6 +128,7 @@ namespace DPsim {
         CPS::Task::List getTasks();
         // determines power flow bus type for each node according to the components attached to it.
     public:
+		long mSubsystem;
         /// Constructor to be used in simulation examples.
 		PFSolver(CPS::String name,
 			CPS::SystemTopology system,
@@ -144,7 +145,7 @@ namespace DPsim {
         class SolveTask : public CPS::Task {
 		public:
 			SolveTask(PFSolver& solver) :
-				Task(solver.mName + ".Solve"), mSolver(solver) {
+				Task(solver.mName + ".Solve", solver.mSubsystem), mSolver(solver) {
 				mModifiedAttributes.push_back(Scheduler::external);
 			}
 

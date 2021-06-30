@@ -39,6 +39,7 @@ namespace DPsim {
 		void logDataLine(Real time, const MatrixComp& data);
 
 	public:
+		long mSubsystem;
 		typedef std::shared_ptr<DataLogger> Ptr;
 		typedef std::vector<DataLogger::Ptr> List;
 
@@ -79,7 +80,7 @@ namespace DPsim {
 		class Step : public CPS::Task {
 		public:
 			Step(DataLogger& logger) :
-				Task(logger.mName + ".Write"), mLogger(logger) {
+				Task(logger.mName + ".Write", logger.mSubsystem), mLogger(logger) {
 				for (auto attr : logger.mAttributes) {
 					mAttributeDependencies.push_back(attr.second);
 				}

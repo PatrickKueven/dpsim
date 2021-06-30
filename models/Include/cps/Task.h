@@ -36,6 +36,14 @@ namespace CPS {
 			return mName;
 		}
 
+		void setSubsystem(long subsystem) {
+			mSubsystem = subsystem;
+		}
+
+		long getSubsystem() {
+			return mSubsystem;
+		}
+
 		const std::vector<AttributeBase::Ptr>& getAttributeDependencies() {
 			return mAttributeDependencies;
 		}
@@ -49,8 +57,9 @@ namespace CPS {
 		}
 
 	protected:
-		Task(const std::string &name) : mName(name) {}
+		Task(const std::string &name, long subsystem = -1) : mName(name), mSubsystem(subsystem) {}
 		std::string mName;
+		long mSubsystem;
 		std::vector<AttributeBase::Ptr> mAttributeDependencies;
 		std::vector<AttributeBase::Ptr> mModifiedAttributes;
 		std::vector<AttributeBase::Ptr> mPrevStepDependencies;

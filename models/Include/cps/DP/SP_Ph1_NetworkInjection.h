@@ -91,7 +91,7 @@ namespace Ph1 {
 		class MnaPreStep : public Task {
 		public:
 			MnaPreStep(NetworkInjection& networkInjection) :
-				Task(networkInjection.mName + ".MnaPreStep"), mNetworkInjection(networkInjection) {
+				Task(networkInjection.mName + ".MnaPreStep", networkInjection.mSubsystem), mNetworkInjection(networkInjection) {
 				mAttributeDependencies.push_back(mNetworkInjection.attribute("V_ref"));
 				mModifiedAttributes.push_back(mNetworkInjection.attribute("right_vector"));
 				mModifiedAttributes.push_back(mNetworkInjection.attribute("v_intf"));
@@ -104,7 +104,7 @@ namespace Ph1 {
 		class MnaPostStep : public Task {
 		public:
 			MnaPostStep(NetworkInjection& networkInjection, Attribute<Matrix>::Ptr leftVector) :
-				Task(networkInjection.mName + ".MnaPostStep"),
+				Task(networkInjection.mName + ".MnaPostStep", networkInjection.mSubsystem),
 				mNetworkInjection(networkInjection), mLeftVector(leftVector) {
 				mAttributeDependencies.push_back(mLeftVector);
 				mModifiedAttributes.push_back(mNetworkInjection.attribute("i_intf"));

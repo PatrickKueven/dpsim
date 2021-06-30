@@ -77,14 +77,13 @@ if(WITH_OPENMP)
 	list(APPEND DPSIM_LIBRARIES ${OpenMP_CXX_FLAGS})
 endif()
 
-if(WITH_SHMEM)
-	set(DPSIM_VILLAS_SOURCES
-		${CMAKE_BINARY_DIR}/_deps/dpsim-villas-src/src/InterfaceShmem.cpp
-		${CMAKE_BINARY_DIR}/_deps/dpsim-villas-src/src/PthreadPoolScheduler.cpp
-	)
+if(WITH_MPI)
+        list(APPEND DPSIM_SOURCES
+                MPILevelScheduler.cpp
+        )
 
-	set(DPSIM_VILLAS_LIBRARIES ${VILLASNODE_LIBRARIES} pthread)
-	set(DPSIM_VILLAS_INCLUDE_DIRS ${VILLASNODE_INCLUDE_DIRS} ${CMAKE_BINARY_DIR}/_deps/dpsim-villas-src/include)
+        list(APPEND DPSIM_CXX_FLAGS ${MPI_CXX_FLAGS})
+        list(APPEND DPSIM_LIBRARIES ${MPI_CXX_FLAGS})
 endif()
 
 add_library(dpsim ${DPSIM_SOURCES} ${DPSIM_VILLAS_SOURCES})

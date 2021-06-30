@@ -422,7 +422,9 @@ void MnaSolver<VarType>::steadyStateInitialization() {
 			tasks.push_back(task);
 		}
 	}
-	tasks.push_back(createSolveTask());
+	auto solveTask = createSolveTask();
+	solveTask->setSubsystem(mSubsystem);
+	tasks.push_back(solveTask);
 
 	sched.resolveDeps(tasks, inEdges, outEdges);
 	sched.createSchedule(tasks, inEdges, outEdges);
@@ -489,11 +491,18 @@ Task::List MnaSolver<VarType>::getTasks() {
 		}
 	}
 	if (mFrequencyParallel) {
-		for (UInt i = 0; i < mSystem.mFrequencies.size(); ++i)
-			l.push_back(createSolveTaskHarm(i));
+		for (UInt i = 0; i < mSystem.mFrequencies.size(); ++i) {
+			auto taskHarm = createSolveTaskHarm(i);
+			taskHarm->setSubsystem(mSubsystem);
+			l.push_back(taskHarm);
+		}
 	} else {
-		l.push_back(createSolveTask());
-		l.push_back(createLogTask());
+		auto solveTask = createSolveTask();
+		solveTask->setSubsystem(mSubsystem);
+		l.push_back(solveTask);
+		auto logTask = createLogTask();
+		logTask->setSubsystem(mSubsystem);
+		l.push_back(logTask);
 	}
 	return l;
 }

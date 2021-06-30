@@ -29,6 +29,8 @@ namespace CPS {
 		///
 		Task::List mMnaTasks;
 	public:
+		///
+		long mSubsystem = -1;
 		typedef VarType Type;
 		typedef std::shared_ptr<SimNode<VarType>> Ptr;
 		typedef std::vector<Ptr> List;
@@ -93,6 +95,8 @@ namespace CPS {
 		///
 		void setMatrixNodeIndex(UInt phase, UInt matrixNodeIndex) { mMatrixNodeIndex[phase] = matrixNodeIndex; }
 		///
+		void setSubsystem(long subsystem) { mSubsystem = subsystem; }
+		///
 		void setVoltage(VarType newVoltage) { }
 
 		// #### MNA Section ####
@@ -110,7 +114,7 @@ namespace CPS {
 		class MnaPostStepHarm : public Task {
 		public:
 			MnaPostStepHarm(SimNode& node, const std::vector<Attribute<Matrix>::Ptr> &leftVectors) :
-				Task(node.mName + ".MnaPostStepHarm"),
+				Task(node.mName + ".MnaPostStepHarm", node.mSubsystem),
 				mNode(node), mLeftVectors(leftVectors) {
 				for (UInt i = 0; i < mLeftVectors.size(); i++)
 					mAttributeDependencies.push_back(mLeftVectors[i]);

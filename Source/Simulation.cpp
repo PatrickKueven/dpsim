@@ -188,6 +188,7 @@ void Simulation::createMNASolver() {
 			// Tear components available, use diakoptics
 			solver = std::make_shared<DiakopticsSolver<VarType>>(mName,
 				subnets[net], mTearComponents, mTimeStep, mLogLevel);
+			solver->setSubsystem(net);
 		}
 		else if (mSystemMatrixRecomputation) {
 #ifdef WITH_SPARSE
@@ -199,6 +200,7 @@ void Simulation::createMNASolver() {
 			solver->setSteadStIniTimeLimit(mSteadStIniTimeLimit);
 			solver->setSteadStIniAccLimit(mSteadStIniAccLimit);
 			solver->setSystem(subnets[net]);
+			solver->setSubsystem(net);
 			solver->initialize();
 #else
 			throw SystemError("Recomputation Solver requires WITH_SPARSE to be set.");
@@ -214,6 +216,7 @@ void Simulation::createMNASolver() {
 			solver->setSteadStIniTimeLimit(mSteadStIniTimeLimit);
 			solver->setSteadStIniAccLimit(mSteadStIniAccLimit);
 			solver->setSystem(subnets[net]);
+			solver->setSubsystem(net);
 			solver->initialize();
 		}
 		mSolvers.push_back(solver);

@@ -151,6 +151,7 @@ cmake_dependent_option(WITH_RT      	"Enable real-time features"          	ON 	"
 cmake_dependent_option(WITH_PYTHON  	"Enable Python support"              	ON 	"Python_FOUND"    	OFF)
 cmake_dependent_option(WITH_CIM     	"Enable support for parsing CIM"     	ON 	"CIMpp_FOUND"     	OFF)
 cmake_dependent_option(WITH_OPENMP  	"Enable OpenMP-based parallelisation"	ON 	"OPENMP_FOUND"    	OFF)
+cmake_dependent_option(WITH_MPI  	"Enable MPI-based parallelisation"	ON 	"MPI_FOUND"	    	ON)
 cmake_dependent_option(WITH_CUDA    	"Enable CUDA-based parallelisation"  	OFF	"CUDA_FOUND"      	OFF)
 cmake_dependent_option(WITH_GRAPHVIZ	"Enable Graphviz Graphs"             	ON 	"GRAPHVIZ_FOUND"  	OFF)
 cmake_dependent_option(WITH_PYBIND     	"Enable PYBIND support"                	ON 	"pybind11_FOUND"   	OFF)

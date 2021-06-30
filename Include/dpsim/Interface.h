@@ -28,6 +28,7 @@ namespace DPsim {
 	class Interface {
 
 	public:
+		long mSubsystem;
 		typedef std::shared_ptr<Interface> Ptr;
         
         Interface() = default;

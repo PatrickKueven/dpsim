@@ -15,21 +15,17 @@
 #include <fstream>
 
 namespace DPsim {
-	class OpenMPLevelScheduler : public Scheduler {
+	class MPILevelScheduler : public Scheduler {
 	public:
-		OpenMPLevelScheduler(Int threads = -1, String outMeasurementFile = String());
+		MPILevelScheduler(Int threads = -1, String outMeasurementFile = String());
 		void createSchedule(const CPS::Task::List& tasks, const Edges& inEdges, const Edges& outEdges);
 		void step(Real time, Int timeStepCount);
 		void stop();
 
 	private:
-		Int mNumThreads;
+		int mRank;
+		int mNumRanks;
 		String mOutMeasurementFile;
-		std::vector<CPS::Task::List> mLevels;
-	    std::vector<std::vector<std::vector<std::chrono::nanoseconds>>> mTimes;
-		Int mCount;
-		String mPreStep, mSolve, mPostStep;
-
-		void printFileOfTimes();
+		std::vector<std::vector<CPS::Task::List>> mLevels;
 	};
 };

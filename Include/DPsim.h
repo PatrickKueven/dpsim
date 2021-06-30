@@ -25,6 +25,10 @@
   #include <dpsim/OpenMPLevelScheduler.h>
 #endif
 
+#ifdef WITH_MPI
+  #include <dpsim/MPILevelScheduler.h>
+#endif
+
 namespace DPsim {
 	// #### CPS for users ####
 	using SystemTopology = CPS::SystemTopology;
