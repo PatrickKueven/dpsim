@@ -23,8 +23,8 @@ int main(int argc, char* argv[]) {
 	Real lineCapacitance = 0.1e-6;
 	
 	// Simulation parameters
-	Real timeStep = 0.001;
-	Real finalTime = 2.0;
+	Real timeStep = 0.0001;
+	Real finalTime = 0.2;
 	CommandLineArgs args(argc, argv);
 	if (argc > 1) {
 		timeStep = args.timeStep;
@@ -91,8 +91,8 @@ int main(int argc, char* argv[]) {
 	auto extnetDP = DP::Ph1::NetworkInjection::make("Slack", Logger::Level::debug);
 	extnetDP->setParameters(Complex(Vnom,0));
 
-	auto lineDP = DP::Ph1::PiLine::make("PiLine", Logger::Level::debug);
-	lineDP->setParameters(lineResistance, lineInductance, lineCapacitance);
+	auto lineDP = CPS::Signal::DecouplingLine::make("DLine", Logger::Level::debug);
+	lineDP->setParameters(n1DP, n2DP, lineResistance, lineInductance, lineCapacitance);
 
 	auto loadDP = DP::Ph1::RXLoad::make("Load", Logger::Level::debug);	
 	loadDP->setParameters(pLoadNom, qLoadNom, Vnom);
@@ -100,7 +100,7 @@ int main(int argc, char* argv[]) {
 
 	// Topology
 	extnetDP->connect({ n1DP });
-	lineDP->connect({ n1DP, n2DP });
+	//lineDP->connect({ n1DP, n2DP });
 	loadDP->connect({ n2DP });	
 	auto systemDP = SystemTopology(50,
 			SystemNodeList{n1DP, n2DP},
@@ -114,7 +114,7 @@ int main(int argc, char* argv[]) {
 	auto loggerDP = DataLogger::make(simNameDP);
 	loggerDP->addAttribute("v1", n1DP->attribute("v"));
 	loggerDP->addAttribute("v2", n2DP->attribute("v"));
-	loggerDP->addAttribute("i12", lineDP->attribute("i_intf"));
+	//loggerDP->addAttribute("i12", lineDP->attribute("i_intf"));
 	loggerDP->addAttribute("irx", loadDP->attribute("i_intf"));
 
 	// load step sized in absolute terms
@@ -128,6 +128,15 @@ int main(int argc, char* argv[]) {
 	sim.setDomain(Domain::DP);
 	sim.addLogger(loggerDP);
 	sim.addEvent(loadStepEvent);
-	sim.run();
+	sim.setScheduler(std::make_shared<MPILevelScheduler>(systemDP, 2));
+	try {
+		sim.run();
+	}
+	catch (CPS::SystemError const &exc) {
+		std::cerr << "Exception caught " << exc.descr() << "\n";
+	}
+	catch (...) {
+		std::cerr << "Unknown exception caught\n";
+	}
 	
 }

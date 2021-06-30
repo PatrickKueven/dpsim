@@ -18,6 +18,11 @@
 
 namespace CPS {
 namespace Signal {
+        struct ringbufferValues_t {
+                UInt idx;
+                Complex values[4];
+        };
+
 	class DecouplingLine :
 		public SimSignalComp,
 		public SharedFactory<DecouplingLine> {
@@ -58,6 +63,8 @@ namespace Signal {
 		void postStep();
 		Task::List getTasks();
 		IdentifiedObject::List getLineComponents();
+		ringbufferValues_t getLastRingbufferValues();
+		void setLastRingbufferValues(ringbufferValues_t values);
 
 		class PreStep : public Task {
 		public:

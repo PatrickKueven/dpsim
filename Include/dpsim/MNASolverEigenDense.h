@@ -101,8 +101,6 @@ namespace DPsim {
 			}
 
 			void execute(Real time, Int timeStepCount) { mSolver.solve(time, timeStepCount); }
-
-		private:
 			MnaSolverEigenDense<VarType>& mSolver;
 		};
 
@@ -125,9 +123,9 @@ namespace DPsim {
 			}
 
 			void execute(Real time, Int timeStepCount) { mSolver.solveWithHarmonics(time, timeStepCount, mFreqIdx); }
+			MnaSolverEigenDense<VarType>& mSolver;
 
 		private:
-			MnaSolverEigenDense<VarType>& mSolver;
 			UInt mFreqIdx;
 		};
 
@@ -141,8 +139,6 @@ namespace DPsim {
 			}
 
 			void execute(Real time, Int timeStepCount) { mSolver.log(time, timeStepCount); }
-
-		private:
 			MnaSolverEigenDense<VarType>& mSolver;
 		};
 	};

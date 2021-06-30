@@ -58,8 +58,6 @@ namespace DPsim {
 			}
 
 			void execute(Real time, Int timeStepCount) { mSolver.solve(time, timeStepCount); }
-
-		private:
 			MnaSolverSysRecomp<VarType>& mSolver;
 		};
 
@@ -72,8 +70,6 @@ namespace DPsim {
 			}
 
 			void execute(Real time, Int timeStepCount) { mSolver.log(time, timeStepCount); }
-
-		private:
 			MnaSolverSysRecomp<VarType>& mSolver;
 		};
 	};

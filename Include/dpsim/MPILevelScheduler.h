@@ -9,23 +9,37 @@
 #pragma once
 
 #include <dpsim/Scheduler.h>
+#include <cps/Signal/DecouplingLine.h>
+#include <cps/SystemTopology.h>
 
 #include <vector>
 #include <iostream>
 #include <fstream>
 
 namespace DPsim {
+	struct decouplingLineValues_t {
+		int subsystem;
+		int lenValues;
+		CPS::Signal::ringbufferValues_t* values;
+	};
+
 	class MPILevelScheduler : public Scheduler {
 	public:
-		MPILevelScheduler(Int threads = -1, String outMeasurementFile = String());
+		MPILevelScheduler(CPS::SystemTopology& sys, Int threads = -1, String outMeasurementFile = String());
 		void createSchedule(const CPS::Task::List& tasks, const Edges& inEdges, const Edges& outEdges);
 		void step(Real time, Int timeStepCount);
 		void stop();
 
 	private:
+		CPS::SystemTopology& mSys;
 		int mRank;
 		int mNumRanks;
+		std::vector<int> mSubsystems;
 		String mOutMeasurementFile;
 		std::vector<std::vector<CPS::Task::List>> mLevels;
+		long getSizeOfDecouplingLineValues(std::vector<decouplingLineValues_t> values);
+		std::vector<decouplingLineValues_t> getDecouplingLineValues();
+		void getData(char* data, std::vector<decouplingLineValues_t> values, long size);
+		void setDecouplingLineValues(char* data);
 	};
 };

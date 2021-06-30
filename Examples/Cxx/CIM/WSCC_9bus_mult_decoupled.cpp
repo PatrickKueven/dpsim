@@ -63,7 +63,7 @@ void simulateDecoupled(std::list<fs::path> filenames, Int copies, Int threads, I
 	sim.setFinalTime(0.5);
 	sim.setDomain(Domain::DP);
 	if (threads > 0)
-		sim.setScheduler(std::make_shared<MPILevelScheduler>(threads));
+		sim.setScheduler(std::make_shared<MPILevelScheduler>(sys, threads));
 		//sim.setScheduler(std::make_shared<OpenMPLevelScheduler>(threads));
 
 	// Logging
