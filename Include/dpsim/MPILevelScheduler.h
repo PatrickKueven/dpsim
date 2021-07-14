@@ -17,12 +17,6 @@
 #include <fstream>
 
 namespace DPsim {
-	struct decouplingLineValues_t {
-		int subsystem;
-		int lenValues;
-		CPS::Signal::ringbufferValues_t* values;
-	};
-
 	class MPILevelScheduler : public Scheduler {
 	public:
 		MPILevelScheduler(CPS::SystemTopology& sys, Int threads = -1, String outMeasurementFile = String());
@@ -34,12 +28,12 @@ namespace DPsim {
 		CPS::SystemTopology& mSys;
 		int mRank;
 		int mNumRanks;
-		std::vector<int> mSubsystems;
+		std::vector<std::vector<int>> mSubsystems;
 		String mOutMeasurementFile;
 		std::vector<std::vector<CPS::Task::List>> mLevels;
-		long getSizeOfDecouplingLineValues(std::vector<decouplingLineValues_t> values);
-		std::vector<decouplingLineValues_t> getDecouplingLineValues();
-		void getData(char* data, std::vector<decouplingLineValues_t> values, long size);
-		void setDecouplingLineValues(char* data);
+		long* mSizesOfDecouplingLineValuesPerRank;
+		void defineSizesOfDecouplingLineValues();
+		void getData(char* data);
+		void setData(char* data, int rank);
 	};
 };

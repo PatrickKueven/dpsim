@@ -171,35 +171,39 @@ IdentifiedObject::List DecouplingLine::getLineComponents() {
 	return IdentifiedObject::List({mRes1, mRes2, mSrc1, mSrc2});
 }
 
-ringbufferValues_t DecouplingLine::getLastRingbufferValues() {
+void DecouplingLine::getLastRingbufferValues(char* data) {
 	UInt lastBufIdx = 0;
-	if (mBufIdx == 0)
-		lastBufIdx = mBufSize - 1;
-	else
-		lastBufIdx = mBufIdx - 1;
+        if (mBufIdx == 0)
+                lastBufIdx = mBufSize - 1;
+        else
+                lastBufIdx = mBufIdx - 1;
 
-	ringbufferValues_t ret;
-	ret.idx = lastBufIdx;
-	ret.values[0] = mVolt1[lastBufIdx];
-	ret.values[1] = mVolt2[lastBufIdx];
-	ret.values[2] = mCur1[lastBufIdx];
-	ret.values[3] = mCur2[lastBufIdx];
-	return ret;
+	std::memcpy(data, &lastBufIdx, sizeof(UInt));
+	data += sizeof(UInt);
+	std::memcpy(data, &(mVolt1[lastBufIdx]), sizeof(Complex));
+        data += sizeof(Complex);
+	std::memcpy(data, &(mVolt2[lastBufIdx]), sizeof(Complex));
+        data += sizeof(Complex);
+	std::memcpy(data, &(mCur1[lastBufIdx]), sizeof(Complex));
+        data += sizeof(Complex);
+	std::memcpy(data, &(mCur2[lastBufIdx]), sizeof(Complex));
+        data += sizeof(Complex);
 }
 
-void DecouplingLine::setLastRingbufferValues(ringbufferValues_t values) {
-	std::cout << "T1\n";
-	Complex volt1(values.values[0]), volt2(values.values[1]), cur1(values.values[2]), cur2(values.values[3]);
-	std::cout << "T2\n";
-	std::cout << "idx: " << values.idx << "\n";
-	std::cout << "mBufSize: " << mBufSize << "\n";
-	mVolt1[values.idx] = volt1;
-	mVolt2[values.idx] = volt2;
-	mCur1[values.idx] = cur1;
-	mCur2[values.idx] = cur2;
-	std::cout << "T3\n";
-	//mVolt1[values.idx] = values.values[0];
-        //mVolt2[values.idx] = values.values[1];
-        //mCur1[values.idx] = values.values[2];
-        //mCur2[values.idx] = values.values[3];
+void DecouplingLine::setLastRingbufferValues(char* data) {
+	UInt lastBufIdx = 0;
+	std::memcpy(&lastBufIdx, data, sizeof(UInt));
+	data += sizeof(UInt);
+	std::memcpy(&(mVolt1[lastBufIdx]), data, sizeof(Complex));
+        data += sizeof(Complex);
+	std::memcpy(&(mVolt2[lastBufIdx]), data, sizeof(Complex));
+        data += sizeof(Complex);
+	std::memcpy(&(mCur1[lastBufIdx]), data, sizeof(Complex));
+        data += sizeof(Complex);
+	std::memcpy(&(mCur2[lastBufIdx]), data, sizeof(Complex));
+        data += sizeof(Complex);
+
+	mBufIdx = lastBufIdx + 1;
+        if (mBufIdx == mBufSize)
+                mBufIdx = 0;
 }
