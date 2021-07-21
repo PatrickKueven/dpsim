@@ -47,5 +47,7 @@ namespace CPS {
 		void setBehaviour(Behaviour behaviour) { mBehaviour = behaviour; }
 
 		void setSubsystem(long subsystem) { mSubsystem = subsystem; }
+
+		long getSubsystem() { return mSubsystem; }
 	};
 }

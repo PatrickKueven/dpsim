@@ -96,6 +96,7 @@ namespace CPS {
 		void setMatrixNodeIndex(UInt phase, UInt matrixNodeIndex) { mMatrixNodeIndex[phase] = matrixNodeIndex; }
 		///
 		void setSubsystem(long subsystem) { mSubsystem = subsystem; }
+		long getSubsystem() { return mSubsystem; }
 		///
 		void setVoltage(VarType newVoltage) { }
 

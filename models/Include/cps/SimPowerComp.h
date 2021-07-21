@@ -137,6 +137,7 @@ namespace CPS {
 		// #### Setters ####
 		///
 		void setSubsystem(long subsystem) { mSubsystem = subsystem; }
+		long getSubsystem() { return mSubsystem; }
 		void setIntfCurrent(MatrixVar<VarType> current) { mIntfCurrent = current; }
 		///
 		void setIntfVoltage(MatrixVar<VarType> voltage) { mIntfVoltage = voltage; }

@@ -96,9 +96,8 @@ int main(int argc, char* argv[]) {
 
 	auto loadDP = DP::Ph1::RXLoad::make("Load", Logger::Level::debug);	
 	loadDP->setParameters(pLoadNom, qLoadNom, Vnom);
-	loadDP->setParameters(pLoadNom, qLoadNom, Vnom);
 
-	// Topology
+        // Topology
 	extnetDP->connect({ n1DP });
 	//lineDP->connect({ n1DP, n2DP });
 	loadDP->connect({ n2DP });	

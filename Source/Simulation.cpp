@@ -16,6 +16,8 @@
 #include <dpsim/Utils.h>
 #include <cps/Utils.h>
 #include <dpsim/MNASolverFactory.h>
+#include <dpsim/MPILevelScheduler.h>
+#include <cps/Signal/DecouplingLine.h>
 #ifdef WITH_SPARSE
 #include <dpsim/MNASolverSysRecomp.h>
 #endif
@@ -106,6 +108,32 @@ Simulation::Simulation(String name, SystemTopology system,
 void Simulation::initialize() {
 	if (mInitialized)
 		return;
+
+	auto psched = std::dynamic_pointer_cast<MPILevelScheduler>(mScheduler);
+	if (psched) {
+		for (long unsigned int i = 0; i < mSystem.mComponents.size(); i++) {
+			auto pcomp = std::dynamic_pointer_cast<CPS::Signal::DecouplingLine>(mSystem.mComponents[i]);
+			if (pcomp) {
+                                auto newLines = pcomp->splitLine();
+				mSystem.mComponents.erase(mSystem.mComponents.begin()+i);
+				mSystem.mComponents.insert(mSystem.mComponents.begin()+i, newLines[0]);
+				mSystem.mComponents.insert(mSystem.mComponents.begin()+i+1, newLines[1]);
+				i++;
+                        }
+		}
+//		CPS::IdentifiedObject::List components;
+//		for (auto comp : mSystem.mComponents) {
+//      	        auto pcomp = std::dynamic_pointer_cast<CPS::Signal::DecouplingLine>(comp);
+//	                if (pcomp) {
+//				auto newLines = pcomp->splitLine();
+//				components.push_back(newLines[0]);
+//				components.push_back(newLines[1]);
+//              	}
+//			else
+//				components.push_back(comp);
+//      	}
+//		mSystem.mComponents = components;
+	}
 
 	mSolvers.clear();
 

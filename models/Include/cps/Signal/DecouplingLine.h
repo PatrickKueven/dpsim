@@ -22,6 +22,7 @@ namespace Signal {
 		public SimSignalComp,
 		public SharedFactory<DecouplingLine> {
 	protected:
+		bool mSplit;
 		Real mDelay;
 		Real mResistance;
 		Real mInductance, mCapacitance;
@@ -49,8 +50,14 @@ namespace Signal {
 
 		DecouplingLine(String name, SimNode<Complex>::Ptr node1, SimNode<Complex>::Ptr node2,
 			Real resistance, Real inductance, Real capacitance, Logger::Level logLevel = Logger::Level::info);
+		DecouplingLine(String name, SimNode<Complex>::Ptr node,
+			Real resistance, Real inductance, Real capacitance, Logger::Level logLevel = Logger::Level::info);
 
 		DecouplingLine(String name, Logger::Level logLevel = Logger::Level::info);
+
+		Ptr mOtherEndOfDecouplingLine;
+
+		void setOtherEndOfDecouplingLine(Ptr otherEndOfDecouplingLine);
 
 		void setParameters(SimNode<Complex>::Ptr node1, SimNode<Complex>::Ptr node2, Real resistance, Real inductance, Real capacitance);
 		void initialize(Real omega, Real timeStep);
@@ -60,6 +67,8 @@ namespace Signal {
 		IdentifiedObject::List getLineComponents();
 		void getLastRingbufferValues(char* data);
 		void setLastRingbufferValues(char* data);
+		std::shared_ptr<DP::SimNode> getFirstNode();
+		IdentifiedObject::List splitLine();
 
 		class PreStep : public Task {
 		public:
@@ -67,7 +76,8 @@ namespace Signal {
 				Task(line.mName + ".MnaPreStep", line.mSubsystem), mLine(line) {
 				mPrevStepDependencies.push_back(mLine.attribute("states"));
 				mModifiedAttributes.push_back(mLine.mSrc1->attribute("I_ref"));
-				mModifiedAttributes.push_back(mLine.mSrc2->attribute("I_ref"));
+				if (!mLine.mSplit)
+					mModifiedAttributes.push_back(mLine.mSrc2->attribute("I_ref"));
 			}
 
 			void execute(Real time, Int timeStepCount);
@@ -82,8 +92,10 @@ namespace Signal {
 				Task(line.mName + ".PostStep", line.mSubsystem), mLine(line) {
 				mAttributeDependencies.push_back(mLine.mRes1->attribute("v_intf"));
 				mAttributeDependencies.push_back(mLine.mRes1->attribute("i_intf"));
-				mAttributeDependencies.push_back(mLine.mRes2->attribute("v_intf"));
-				mAttributeDependencies.push_back(mLine.mRes2->attribute("i_intf"));
+				if (!mLine.mSplit) {
+					mAttributeDependencies.push_back(mLine.mRes2->attribute("v_intf"));
+					mAttributeDependencies.push_back(mLine.mRes2->attribute("i_intf"));
+				}
 				mModifiedAttributes.push_back(mLine.attribute("states"));
 				}
 

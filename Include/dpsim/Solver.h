@@ -84,6 +84,10 @@ namespace DPsim {
 			mSubsystem = subsystem;
 		}
 
+		long getSubsystem() {
+			return mSubsystem;
+		}
+
 		// #### Initialization ####
 		///
 		virtual void initialize() {}

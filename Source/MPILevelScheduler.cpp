@@ -46,9 +46,10 @@ void MPILevelScheduler::createSchedule(const Task::List& tasks, const Edges& inE
 		Scheduler::initMeasurements(tasks);
 
 	for (level = 0; level < static_cast<long>(levels.size()); level++)
-                for (i = 0; i < static_cast<long>(levels[level].size()); i++)
+                for (i = 0; i < static_cast<long>(levels[level].size()); i++) {
                         if (levels[level][i]->getSubsystem() > maxSubsystem)
                                 maxSubsystem = levels[level][i]->getSubsystem();
+		}
 
         for (i = 0; i <= maxSubsystem; i++) {
 		std::vector<CPS::Task::List> tmp;
@@ -117,7 +118,7 @@ void MPILevelScheduler::step(Real time, Int timeStepCount) {
 			}
 		}
 
-		std::cout << mRank << "start\n";
+		//std::cout << mRank << "start\n";
 
 		for (i = 0; i < mNumRanks; i++) {
 			if (mSizesOfDecouplingLineValuesPerRank[i] != 0) {
@@ -128,21 +129,23 @@ void MPILevelScheduler::step(Real time, Int timeStepCount) {
 				MPI_Barrier(MPI_COMM_WORLD);
 				MPI_Bcast(data, mSizesOfDecouplingLineValuesPerRank[i], MPI_BYTE, i, MPI_COMM_WORLD);
 				MPI_Barrier(MPI_COMM_WORLD);
-				if (i != mRank)
+				if (i != mRank) {
+					std::cout << mRank << ": setData\n";
 					setData(data, i);
+				}
 				free(data);
 				MPI_Barrier(MPI_COMM_WORLD);
 			}
 		}
 
-		std::cout << mRank << "end\n";
+		//std::cout << mRank << "end\n";
 	}
 }
 
 void MPILevelScheduler::defineSizesOfDecouplingLineValues() {
 	mSizesOfDecouplingLineValuesPerRank = new long[mNumRanks];
 
-	int sizeRingbufferValues = sizeof(UInt) + 4 * sizeof(Complex);
+	int sizeRingbufferValues = sizeof(UInt) + 2 * sizeof(Complex);
 
 	for (int i = 0; i < mNumRanks; i++) {
 		mSizesOfDecouplingLineValuesPerRank[i] = 0L;
@@ -150,9 +153,14 @@ void MPILevelScheduler::defineSizesOfDecouplingLineValues() {
 			long cnt = 0;
 	                for (auto comp : mSys.mComponents) {
         	                auto pcomp = std::dynamic_pointer_cast<CPS::Signal::DecouplingLine>(comp);
+				if (pcomp) {
+					std::cout << "Test: " << pcomp->getSubsystem() << "\n";
+					std::cout << "Test 3: " << pcomp->getFirstNode()->getSubsystem() << "\n";
+				}
                 	        if (pcomp && pcomp->mSubsystem == subsystem)
                         	        cnt++;
 	                }
+			std::cout << mRank << ": cnt: " << cnt << "\n";
 	        	mSizesOfDecouplingLineValuesPerRank[i] += cnt * sizeRingbufferValues;
 		}
 	}
@@ -177,7 +185,7 @@ void MPILevelScheduler::setData(char* data, int rank) {
                 for (auto comp : mSys.mComponents) {
                         auto pcomp = std::dynamic_pointer_cast<CPS::Signal::DecouplingLine>(comp);
                         if (pcomp && pcomp->mSubsystem == mSubsystems[rank][subsystem])
-				pcomp->setLastRingbufferValues(data);
+				pcomp->mOtherEndOfDecouplingLine->setLastRingbufferValues(data);
                 }
         }
 }

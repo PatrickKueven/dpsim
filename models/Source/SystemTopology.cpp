@@ -13,6 +13,7 @@
 
 #include <cps/SystemTopology.h>
 #include <cps/SimSignalComp.h>
+#include <cps/Signal/DecouplingLine.h>
 
 using namespace CPS;
 
@@ -99,7 +100,8 @@ void SystemTopology::splitSubnets(std::vector<SystemTopology>& splitSystems) {
 			auto pnode = std::dynamic_pointer_cast<SimNode<VarType>>(node);
 			if (!pnode || node->isGround())
 				continue;
-
+			
+			pnode->setSubsystem(subnet[pnode]);
 			nodes[subnet[pnode]].push_back(node);
 		}
 
@@ -112,36 +114,28 @@ void SystemTopology::splitSubnets(std::vector<SystemTopology>& splitSystems) {
 				// since they are actually independent of which solver we use
 				// for the electric part.
 				// Just adding them to an arbitrary solver for now has the same effect.
+				auto pcomp2 = std::dynamic_pointer_cast<CPS::Signal::DecouplingLine>(comp);
+				if (pcomp2) {
+					std::cout << "Found DL\n";
+					std::cout << "DL subsystem: " << pcomp2->getFirstNode()->getSubsystem() << "\n";
+					pcomp2->setSubsystem(pcomp2->getFirstNode()->getSubsystem());
+					std::cout << "DL subsystem 2: " << pcomp2->getSubsystem() << "\n";
+					components[pcomp2->getSubsystem()].push_back(comp);
+					continue;
+				}
+
 				components[0].push_back(comp);
 				continue;
 			}
 			for (UInt nodeIdx = 0; nodeIdx < pcomp->terminalNumber(); nodeIdx++) {
 				if (!pcomp->node(nodeIdx)->isGround()) {
-					components[subnet[pcomp->node(nodeIdx)]].push_back(comp);
+					pcomp->setSubsystem(pcomp->node(nodeIdx)->getSubsystem());
+					components[pcomp->node(nodeIdx)->getSubsystem()].push_back(comp);
 					break;
 				}
 			}
 		}
 		for (int currentNet = 0; currentNet < numberSubnets; currentNet++) {
-			for (auto node : nodes[currentNet]) {
-				auto pnode = std::dynamic_pointer_cast<SimNode<VarType>>(node);
-				if (pnode) {
-					pnode->setSubsystem(currentNet);
-				}
-			}
-
-			for (auto comp : components[currentNet]) {
-				auto pcomp = std::dynamic_pointer_cast<SimPowerComp<VarType>>(comp);
-				if (!pcomp) {
-					auto pcomp2 = std::dynamic_pointer_cast<SimSignalComp>(comp);
-					if (pcomp2) {
-						pcomp2->setSubsystem(currentNet);
-					}
-					continue;
-				}
-				pcomp->setSubsystem(currentNet);
-			}
-
 			splitSystems.emplace_back(mSystemFrequency,
 				nodes[currentNet], components[currentNet]);
 		}
