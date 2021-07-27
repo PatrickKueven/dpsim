@@ -31,6 +31,8 @@ MPILevelScheduler::MPILevelScheduler(CPS::SystemTopology& sys, Int threads, Stri
 		MPI_Comm_size(MPI_COMM_WORLD, &mNumRanks);
 
 	MPI_Comm_rank(MPI_COMM_WORLD, &mRank);
+
+	Logger::setLogDir(Logger::logDir() + "_" + std::to_string(mRank));
 }
 
 void MPILevelScheduler::createSchedule(const Task::List& tasks, const Edges& inEdges, const Edges& outEdges) {

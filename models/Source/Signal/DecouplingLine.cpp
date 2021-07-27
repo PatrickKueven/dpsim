@@ -262,8 +262,8 @@ std::shared_ptr<DP::SimNode> DecouplingLine::getFirstNode() {
 }
 
 IdentifiedObject::List DecouplingLine::splitLine() {
-	DecouplingLine::Ptr line1 = DecouplingLine::make(mName, mNode1, mResistance, mInductance, mCapacitance, mLogLevel);
-	DecouplingLine::Ptr line2 = DecouplingLine::make(mName, mNode2, mResistance, mInductance, mCapacitance, mLogLevel);
+	DecouplingLine::Ptr line1 = DecouplingLine::make(mName + "_1", mNode1, mResistance, mInductance, mCapacitance, mLogLevel);
+	DecouplingLine::Ptr line2 = DecouplingLine::make(mName + "_2", mNode2, mResistance, mInductance, mCapacitance, mLogLevel);
 	line1->setOtherEndOfDecouplingLine(line2);
 	line2->setOtherEndOfDecouplingLine(line1);
 	return IdentifiedObject::List({line1, line2});
