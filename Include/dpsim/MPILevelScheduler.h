@@ -23,6 +23,7 @@ namespace DPsim {
 		void createSchedule(const CPS::Task::List& tasks, const Edges& inEdges, const Edges& outEdges);
 		void step(Real time, Int timeStepCount);
 		void stop();
+		void setSystem(CPS::SystemTopology& sys) { mSys = sys; }
 
 	private:
 		CPS::SystemTopology& mSys;

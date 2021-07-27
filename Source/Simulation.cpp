@@ -121,6 +121,7 @@ void Simulation::initialize() {
 				i++;
                         }
 		}
+		psched->setSystem(mSystem);
 //		CPS::IdentifiedObject::List components;
 //		for (auto comp : mSystem.mComponents) {
 //      	        auto pcomp = std::dynamic_pointer_cast<CPS::Signal::DecouplingLine>(comp);

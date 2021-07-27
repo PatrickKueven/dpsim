@@ -116,10 +116,7 @@ void SystemTopology::splitSubnets(std::vector<SystemTopology>& splitSystems) {
 				// Just adding them to an arbitrary solver for now has the same effect.
 				auto pcomp2 = std::dynamic_pointer_cast<CPS::Signal::DecouplingLine>(comp);
 				if (pcomp2) {
-					std::cout << "Found DL\n";
-					std::cout << "DL subsystem: " << pcomp2->getFirstNode()->getSubsystem() << "\n";
 					pcomp2->setSubsystem(pcomp2->getFirstNode()->getSubsystem());
-					std::cout << "DL subsystem 2: " << pcomp2->getSubsystem() << "\n";
 					components[pcomp2->getSubsystem()].push_back(comp);
 					continue;
 				}

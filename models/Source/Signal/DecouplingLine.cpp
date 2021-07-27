@@ -52,7 +52,7 @@ DecouplingLine::DecouplingLine(String name, SimNode<Complex>::Ptr node, Real res
 	SimSignalComp(name, name, logLevel),
 	mResistance(resistance), mInductance(inductance), mCapacitance(capacitance),
 	mNode1(node) {
-	
+
 	mSplit = true;
 
 	addAttribute<Matrix>("states", &mStates);

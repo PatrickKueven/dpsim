@@ -122,17 +122,14 @@ void MPILevelScheduler::step(Real time, Int timeStepCount) {
 
 		for (i = 0; i < mNumRanks; i++) {
 			if (mSizesOfDecouplingLineValuesPerRank[i] != 0) {
-				std::cout << mRank << ": " << mSizesOfDecouplingLineValuesPerRank[i] << "\n"; 
 				char* data = (char*)malloc(mSizesOfDecouplingLineValuesPerRank[i]);
 				if (i == mRank)
 					getData(data);
 				MPI_Barrier(MPI_COMM_WORLD);
 				MPI_Bcast(data, mSizesOfDecouplingLineValuesPerRank[i], MPI_BYTE, i, MPI_COMM_WORLD);
 				MPI_Barrier(MPI_COMM_WORLD);
-				if (i != mRank) {
-					std::cout << mRank << ": setData\n";
+				if (i != mRank)
 					setData(data, i);
-				}
 				free(data);
 				MPI_Barrier(MPI_COMM_WORLD);
 			}
@@ -153,14 +150,9 @@ void MPILevelScheduler::defineSizesOfDecouplingLineValues() {
 			long cnt = 0;
 	                for (auto comp : mSys.mComponents) {
         	                auto pcomp = std::dynamic_pointer_cast<CPS::Signal::DecouplingLine>(comp);
-				if (pcomp) {
-					std::cout << "Test: " << pcomp->getSubsystem() << "\n";
-					std::cout << "Test 3: " << pcomp->getFirstNode()->getSubsystem() << "\n";
-				}
-                	        if (pcomp && pcomp->mSubsystem == subsystem)
+                	        if (pcomp && pcomp->getSubsystem() == subsystem)
                         	        cnt++;
 	                }
-			std::cout << mRank << ": cnt: " << cnt << "\n";
 	        	mSizesOfDecouplingLineValuesPerRank[i] += cnt * sizeRingbufferValues;
 		}
 	}
